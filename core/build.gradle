@@ -1,6 +1,8 @@
 dependencies {
     compile "org.apache.commons:commons-lang3:$version_commons_lang3"
     compile "org.springframework.data:spring-data-commons:$version_spring_data"
+    compile "org.slf4j:slf4j-simple:$version_slf4j"
 
     testCompile "junit:junit:$version_junit"
+    testCompile "io.github.benas:random-beans:$version_random_beans"
 }
