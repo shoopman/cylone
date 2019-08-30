@@ -6,3 +6,30 @@ dependencies {
     testCompile "junit:junit:$version_junit"
     testCompile "io.github.benas:random-beans:$version_random_beans"
 }
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allJava
+}
+// 生成 javadoc jar
+task javadocJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+// javadoc 配置，这里是自定义了 java doc 的一些配置
+javadoc {
+    description = "Generates project-level javadoc for use in -javadoc jar"
+
+    options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+    options.author = true
+    options.version = true
+    options.header = project.name
+    options.addStringOption('Xdoclint:none', '-quiet')
+
+    // suppress warnings due to cross-module @see and @link references;
+    // note that global 'api' task does display all warnings.
+    logging.captureStandardError LogLevel.INFO
+    logging.captureStandardOutput LogLevel.INFO // suppress "## warnings" message
+    options.encoding = "UTF-8"  //编码一定要配置否则直接出错
+    options.charSet = 'UTF-8'
+}
