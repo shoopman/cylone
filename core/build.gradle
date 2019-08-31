@@ -7,6 +7,9 @@ dependencies {
     testCompile "io.github.benas:random-beans:$version_random_beans"
 }
 
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
 task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
     from sourceSets.main.allJava
@@ -14,22 +17,71 @@ task sourcesJar(type: Jar) {
 // 生成 javadoc jar
 task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc
 }
-// javadoc 配置，这里是自定义了 java doc 的一些配置
+
+publishing {
+    // 定义发布什么
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'net.meku.cylone'
+            artifactId = 'cylone'
+            version = '1.0.0'
+            // groupId,artifactId,version，如果不定义，则会按照以上默认值执行
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                // 构件名称
+                // 区别于artifactId，可以理解为artifactName
+                name = 'Cylone'
+                // 构件描述
+                description = 'A light-weight library to convert pojos'
+                // 构件主页
+                url = 'https://github.com/shoopman/cylone'
+                // 许可证名称和地址
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                // 开发者信息
+                developers {
+                    developer {
+                        name = 'Cary Leung'
+                        email = 'shoopman917@gmail.com'
+                    }
+                }
+                // 版本控制仓库地址
+                scm {
+                    url = 'https://github.com/shoopman/cylone'
+                    connection = 'scm:git:git://github.com/shoopman/cylone.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:shoopman/cylone.git'
+                }
+            }
+        }
+    }
+    // 定义发布到哪里
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                // 这里就是之前在issues.sonatype.org注册的账号
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+
 javadoc {
-    description = "Generates project-level javadoc for use in -javadoc jar"
-
-    options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
-    options.author = true
-    options.version = true
-    options.header = project.name
-    options.addStringOption('Xdoclint:none', '-quiet')
-
-    // suppress warnings due to cross-module @see and @link references;
-    // note that global 'api' task does display all warnings.
-    logging.captureStandardError LogLevel.INFO
-    logging.captureStandardOutput LogLevel.INFO // suppress "## warnings" message
-    options.encoding = "UTF-8"  //编码一定要配置否则直接出错
-    options.charSet = 'UTF-8'
+    // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    // 防止本地打开中文乱码
+    options.addStringOption("charset", "UTF-8")
 }
