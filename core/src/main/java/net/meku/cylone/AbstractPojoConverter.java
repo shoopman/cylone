@@ -16,7 +16,9 @@ public abstract class AbstractPojoConverter<T, S>
     /**
      * 创建空的目标实例，子类可覆盖
      *
-     * @return
+     * @param source 源Pojo
+     *
+     * @return 目标Pojo
      */
     protected T createEmptyTarget(S source) {
         Class<T> type =

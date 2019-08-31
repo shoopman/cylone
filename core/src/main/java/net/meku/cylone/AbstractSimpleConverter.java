@@ -30,9 +30,9 @@ public abstract class AbstractSimpleConverter<T, S> extends BeanCopyPojoConverte
     /**
      * 转换分页对象，目标列表的数量必须要与分页里源对象数量一致
      *
-     * @param targetList
-     * @param sourcePage
-     * @return
+     * @param targetList 目标列表
+     * @param sourcePage 源分页对象
+     * @return 目标分页对象
      */
     public Page<T> toPage(Page<S> sourcePage, List<T> targetList) {
         if (sourcePage == null || sourcePage == null) {

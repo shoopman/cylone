@@ -12,7 +12,9 @@ public abstract class BeanCopyPojoConverter<T, S>
     /**
      * 复制到新建的目标实例时忽略的属性，子类可覆盖
      *
-     * @return
+     * @param target 目标Pojo
+     *
+     * @return 忽略的属性名数组
      */
     protected String[] ignoreFieldsWhileCreating(T target) {
         return ArrayUtils.EMPTY_STRING_ARRAY;
@@ -21,7 +23,9 @@ public abstract class BeanCopyPojoConverter<T, S>
     /**
      * 复制到已存在目标实例时忽略的属性，子类可覆盖
      *
-     * @return
+     * @param target 目标Pojo
+     *
+     * @return 忽略的属性名数组
      */
     protected String[] ignoreExistingWhileUpdating(T target) {
         return ArrayUtils.EMPTY_STRING_ARRAY;
@@ -30,8 +34,8 @@ public abstract class BeanCopyPojoConverter<T, S>
     /**
      * 属性复制后的操作
      * 
-     * @param source
-     * @param target
+     * @param source 源Pojo
+     * @param target 目标Pojo
      */
     protected void afterBeanCopy(S source, T target) {
     }
