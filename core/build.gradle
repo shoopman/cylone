@@ -10,6 +10,8 @@ dependencies {
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+archivesBaseName = 'cylone-core'
+
 task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
     from sourceSets.main.allJava
@@ -25,7 +27,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'net.meku.cylone'
-            artifactId = 'cylone'
+            artifactId = 'cylone-core'
             version = '1.0.0'
             // groupId,artifactId,version，如果不定义，则会按照以上默认值执行
             from components.java
